@@ -28,6 +28,9 @@ jobs:
       - name: Install scarfco
         uses: mallowlabs/scarfco@main
 
+      - name: Show scarfco version
+        run: scarfco -v
+
       - name: Convert to SARIF
         run: |
           mkdir -p sarif
