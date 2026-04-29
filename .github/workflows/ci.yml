@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      security-events: write
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -23,6 +24,22 @@ jobs:
 
       - name: Build and analyze
         run: mvn package site
+
+      - name: Install scarfco
+        uses: mallowlabs/scarfco@main
+
+      - name: Convert to SARIF
+        run: |
+          mkdir -p sarif
+          cat target/spotbugs.xml          | scarfco --format sarif > sarif/spotbugs.sarif
+          cat target/pmd.xml               | scarfco --format sarif > sarif/pmd.sarif
+          cat target/cpd.xml               | scarfco --format sarif > sarif/cpd.sarif
+          cat target/checkstyle-result.xml | scarfco --format sarif > sarif/checkstyle.sarif
+
+      - name: Upload SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: sarif/
 
       - name: Upload analysis XML reports
         uses: actions/upload-artifact@v7
