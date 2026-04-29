@@ -3,7 +3,7 @@
 A sample Maven project demonstrating how to use [scarfco](https://github.com/mallowlabs/scarfco).
 
 Running `mvn site` generates analysis reports from SpotBugs, Checkstyle, PMD, and CPD.
-Each tool's XML output can then be converted to Checkstyle format using scarfco.
+Each tool's XML output can then be converted to Checkstyle or SARIF format using scarfco.
 
 ## Prerequisites
 
@@ -45,6 +45,17 @@ cat target/pmd.xml               | scarfco | reviewdog -name=pmd        -f=check
 cat target/cpd.xml               | scarfco | reviewdog -name=cpd        -f=checkstyle -reporter=github-pr-review
 cat target/checkstyle-result.xml | scarfco | reviewdog -name=checkstyle -f=checkstyle -reporter=github-pr-review
 ```
+
+### 4. Upload to GitHub Code Scanning (SARIF)
+
+```bash
+cat target/spotbugs.xml          | scarfco --format sarif > spotbugs.sarif
+cat target/pmd.xml               | scarfco --format sarif > pmd.sarif
+cat target/cpd.xml               | scarfco --format sarif > cpd.sarif
+cat target/checkstyle-result.xml | scarfco --format sarif > checkstyle.sarif
+```
+
+Then upload with `github/codeql-action/upload-sarif@v4`. See [ci.yml](.github/workflows/ci.yml) for a working example.
 
 ## Intentional issues in this sample
 
