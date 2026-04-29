@@ -23,3 +23,14 @@ jobs:
 
       - name: Build and analyze
         run: mvn package site
+
+      - name: Upload analysis XML reports
+        uses: actions/upload-artifact@v7
+        with:
+          name: analysis-reports
+          path: |
+            target/spotbugs.xml
+            target/spotbugsXml.xml
+            target/pmd.xml
+            target/cpd.xml
+            target/checkstyle-result.xml
