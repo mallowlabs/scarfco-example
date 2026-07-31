@@ -40,7 +40,7 @@ jobs:
           cat target/checkstyle-result.xml | scarfco --format sarif > sarif/checkstyle.sarif
 
       - name: Upload SARIF to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@v4.37.3
         with:
           sarif_file: sarif/
 
